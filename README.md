@@ -22,7 +22,7 @@ For more details, please see his original write-up at https://stjarnhimlen.se/co
 Contributions to this code are welcome. If you have any suggested improvements, please fork the repo and create a pull request. Bug reports and enhancements in the Issues tab are also welcome. 
 
 ## License
-This project is distributed under the GNU GPL v3 license. See `LICENSE.md` for more information.
+This project is distributed under the GNU GPL v3 license. See `LICENSE` for more information.
 
 ## Contact
 You can reach me through the contact information listed on the [About page at my blog](https://www.nickplaysjazz.com/about).
