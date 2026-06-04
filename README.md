@@ -3,7 +3,7 @@ Calculations written in Python to obtain astronomical information for a given da
 
 Currently this code can be used to obtain planetary positions for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn.
 
-See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-clock-1.md) for information on this project and its development.
+See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-clock-1/) for information on this project and its development.
 
 ## Usage
 To calculate planetary positions for a given date, run `python calc_planetary_positions.py YYYY-MM-DD HH:MM` with HH:MM in UTC. 
