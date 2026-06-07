@@ -14,11 +14,9 @@ from prettytable import PrettyTable
 
 from orbital_elements import OrbitalElements
 
-
 class bcolors:
     FAIL = '\033[91m'
     ENDC = '\033[00m'
-
 
 def io():
 
@@ -32,10 +30,15 @@ def io():
             calendar_input = item
         elif re.match(r"\d{2}:\d{2}", item):
             time_input = item
+        elif re.match(r"-?\d+\.\d+n", item, re.IGNORECASE):
+            latitude_input = item
+        elif re.match(r"-?\d+\.\d+e", item, re.IGNORECASE):
+            longitude_input = item
         else:
             sys.exit(f"{bcolors.FAIL}Usage: \"python calc_planetary_positions.py YYYY-MM-DD HH:MM latDegN lonDegE \" with HH:MM in UTC." \
-                 f"\n\nInputs are accepted regardless of order, provided they each fit the exact form provided above."
-                 f"\nIf YYYY-MM-DD HH:MM are not present in exact form, then the current date and time is assumed.")
+                 f"\n\nInputs are accepted regardless of order, provided they each fit the exact form provided above." \
+                 f"\nIf YYYY-MM-DD is not present in exact form, then the current date is assumed." \
+                 f"\nIf HH:MM is not present in exact form, then the current time is assumed.")
             
     if (calendar_input == None):
         dat = datetime.datetime.now(datetime.timezone.utc)
@@ -74,6 +77,9 @@ def main():
     atan2d = lambda y, x :  np.mod(np.rad2deg(np.atan2(y, x)), 360)
 
     degree_sign = u'\N{DEGREE SIGN}'
+
+    correct_for_precession = False
+    epoch = 2000
 
     y, m, day, io_h, io_m = io()
     UT = io_h + (io_m/60)
@@ -132,7 +138,7 @@ def main():
     D = Lm - Ls
     F = Lm - Nm
     Mj = M_list[5]
-    Ms = M_list[6]
+    Msat = M_list[6]
 
     for planet_num, planet_name in enumerate(planets):
         # longitude of ascending node
@@ -192,6 +198,10 @@ def main():
         if planet_name == "sun":
             # true longitude
             lonsun = np.mod(v + w, 360)
+
+            if correct_for_precession:
+                lonsun += 3.82394E-5 * ( 365.2422 * (epoch - 2000.0 ) - d )
+
             rs = r
             Ls = M + w
 
@@ -222,8 +232,8 @@ def main():
             lonecl = atan2d(yh, xh)
             latecl = atan2d(zh, np.sqrt(xh**2 + yh**2))
 
-            # We do NOT correct for precession here
-            # which would be necesary if we are plotting positions against a map of the stars
+            if correct_for_precession:
+                lonecl += 3.82394E-5 * ( 365.2422 * (epoch - 2000.0 ) - d )
 
             if planet_name == "moon":
                 lonecl += (
@@ -252,25 +262,25 @@ def main():
                 r += -0.58 * cosd(Mm - 2 * D) - 0.46 * cosd(2 * D)
             elif planet_name == "jupiter":
                 lonecl += (
-                    -0.332 * sind(2 * Mj - 5 * Ms - 67.6)
-                    - 0.056 * sind(2 * Mj - 2 * Ms + 21)
-                    + 0.042 * sind(3 * Mj - 5 * Ms + 21)
-                    - 0.036 * sind(Mj - 2 * Ms)
-                    + 0.022 * cosd(Mj - Ms)
-                    + 0.023 * sind(2 * Mj - 3 * Ms + 52)
-                    - 0.016 * sind(Mj - 5 * Ms - 69)
+                    -0.332 * sind(2 * Mj - 5 * Msat - 67.6)
+                    - 0.056 * sind(2 * Mj - 2 * Msat + 21)
+                    + 0.042 * sind(3 * Mj - 5 * Msat + 21)
+                    - 0.036 * sind(Mj - 2 * Msat)
+                    + 0.022 * cosd(Mj - Msat)
+                    + 0.023 * sind(2 * Mj - 3 * Msat + 52)
+                    - 0.016 * sind(Mj - 5 * Msat - 69)
                 )
 
             elif planet_name == "saturn":
                 lonecl += (
-                    +0.812 * sind(2 * Mj - 5 * Ms - 67.6)
-                    - 0.229 * cosd(2 * Mj - 4 * Ms - 2)
-                    + 0.119 * sind(Mj - 2 * Ms - 3)
-                    + 0.046 * sind(2 * Mj - 6 * Ms - 69)
-                    + 0.014 * sind(Mj - 3 * Ms + 32)
+                    +0.812 * sind(2 * Mj - 5 * Msat - 67.6)
+                    - 0.229 * cosd(2 * Mj - 4 * Msat - 2)
+                    + 0.119 * sind(Mj - 2 * Msat - 3)
+                    + 0.046 * sind(2 * Mj - 6 * Msat - 69)
+                    + 0.014 * sind(Mj - 3 * Msat + 32)
                 )
-                latecl += -0.020 * cosd(2 * Mj - 4 * Ms - 2) + 0.018 * sind(
-                    2 * Mj - 6 * Ms - 49
+                latecl += -0.020 * cosd(2 * Mj - 4 * Msat - 2) + 0.018 * sind(
+                    2 * Mj - 6 * Msat - 49
                 )
 
             lonecl = np.mod(lonecl, 360)
@@ -324,6 +334,8 @@ def main():
 
     print("")
     print(f"Calculations for: {y}-{m}-{day} {io_h}:{io_m} UTC")
+    if correct_for_precession:
+        print(f"Corrected for precession to epoch J{epoch}.")
     #print(f"Day number: {d} (relative to Jan 1 2000.0 at 0h UT)")
     print(table)
     print("")
