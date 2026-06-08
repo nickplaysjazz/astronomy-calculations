@@ -14,6 +14,18 @@ from prettytable import PrettyTable
 
 from orbital_elements import OrbitalElements
 
+# some macros to simplify trig calcs
+cosd = lambda deg : np.cos(np.deg2rad(deg))
+sind = lambda deg : np.sin(np.deg2rad(deg))
+tand = lambda deg : np.tan(np.deg2rad(deg))
+atan2d = lambda y, x :  np.mod(np.rad2deg(np.atan2(y, x)), 360)
+
+pi = np.pi
+
+degree_sign = u'\N{DEGREE SIGN}'
+
+planets = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"]
+
 class bcolors:
     FAIL = '\033[91m'
     ENDC = '\033[00m'
@@ -69,40 +81,9 @@ def io():
     return year, month, day, hour, minute
 
 
-def main():
-
-    cosd = lambda deg : np.cos(np.deg2rad(deg))
-    sind = lambda deg : np.sin(np.deg2rad(deg))
-    tand = lambda deg : np.tan(np.deg2rad(deg))
-    atan2d = lambda y, x :  np.mod(np.rad2deg(np.atan2(y, x)), 360)
-
-    degree_sign = u'\N{DEGREE SIGN}'
-
-    correct_for_precession = False
-    epoch = 2000
-
-    y, m, day, io_h, io_m = io()
-    UT = io_h + (io_m/60)
-
-    pi = np.pi
-
-    # day number and fraction
-    d = 367 * y - 7 * (y + (m + 9) // 12) // 4 - 3 * ((y + (m - 9)//7)//100 + 1)//4 + 275 * m // 9 + day - 730515
-    d = d + UT / 24
-
-    planets = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"]
-
-    table = PrettyTable()
-    table.field_names = [
-        "Planet",
-        f"RA ({degree_sign})",
-        f"Dec ({degree_sign})",
-    ]
-    table.align["Planet"] = "r"
-    table.align[f"RA ({degree_sign})"] = "r"
-    table.align[f"Dec ({degree_sign})"] = "r"
-
-    data_list = []
+def calc_positions(y, m, day, UT, d, is_equatorial, correct_for_precession=False, epoch=2000):
+    """If is_equatorial == True, then returns equatorial positions.
+    Else returns ecliptic positions."""
 
     planetary_distances = []
 
@@ -115,6 +96,7 @@ def main():
 
     true_anomaly_list = [0 for x in range(7)]
     equatorial_positions = [np.array([0,0,0]) for x in range(7)]
+    ecliptic_positions = [np.array([0,0,0]) for x in range(7)]
 
     # Orbital elements to be used later
     elements = OrbitalElements(d)
@@ -215,6 +197,8 @@ def main():
             xg = xs
             yg = ys
 
+            ecliptic_positions[0] = np.array([xg, yg, 0])
+
             # equatorial rectangular geocentric coordinates for sun
             xe = xs
             ye = ys * cosd(ecl)
@@ -305,6 +289,8 @@ def main():
                 yg = yh_perturbed + ys
                 zg = zh_perturbed
 
+            ecliptic_positions[planet_num] = np.array([xg, yg, zg])
+
             # equatorial geocentric coordinates
             xe = xg
             ye = yg * cosd(ecl) - zg * sind(ecl)
@@ -315,13 +301,48 @@ def main():
             # geocentric distance
             rg = np.sqrt(xg**2 + yg**2 + zg**2)
 
+            "If is_equatorial == True, then returns equatorial positions. Else returns ecliptic positions."""
+
+    if is_equatorial:
+        return equatorial_positions
+    else:
+        return ecliptic_positions
+    
+
+if __name__ == "__main__":
+    correct_for_precession = False
+    epoch = 2000
+
+    y, m, day, io_h, io_m = io()
+    UT = io_h + (io_m/60)
+
+    # day number and fraction
+    d = 367 * y - 7 * (y + (m + 9) // 12) // 4 - 3 * ((y + (m - 9)//7)//100 + 1)//4 + 275 * m // 9 + day - 730515
+    d = d + UT / 24
+    
+    # calculate positions
+    eq_positions = calc_positions(y, m, day, UT, d, is_equatorial=True, correct_for_precession=correct_for_precession, epoch=epoch)
+
+    # make a pretty output
+    table = PrettyTable()
+    table.field_names = [
+        "Planet",
+        f"RA ({degree_sign})",
+        f"Dec ({degree_sign})",
+    ]
+    table.align["Planet"] = "r"
+    table.align[f"RA ({degree_sign})"] = "r"
+    table.align[f"Dec ({degree_sign})"] = "r"
+
+    for planet_number, planet_name in enumerate(planets):
+        xe, ye, ze = eq_positions[planet_number]
         # right ascension
         RA = atan2d(ye, xe)
 
         # declination. Do NOT wrap this to [0, 360)
         Dec = np.rad2deg(np.atan2(ze, np.sqrt(xe**2 + ye**2)))
 
-        data_list.append(
+        table.add_row(
             [
                 planet_name,
                 "{:0.4f}".format(round(RA, 4)),
@@ -329,17 +350,10 @@ def main():
             ]
         )
 
-    for x in data_list: 
-        table.add_row(x)    
-
     print("")
-    print(f"Calculations for: {y}-{m}-{day} {io_h}:{io_m} UTC")
+    print(f"Calculations for: {y:04}-{m:02}-{day:02} {io_h:02}:{io_m:02} UTC")
     if correct_for_precession:
         print(f"Corrected for precession to epoch J{epoch}.")
     #print(f"Day number: {d} (relative to Jan 1 2000.0 at 0h UT)")
     print(table)
     print("")
-
-
-if __name__ == "__main__":
-    main()
