@@ -5,10 +5,7 @@ For details, please see his original write-up at https://stjarnhimlen.se/comp/pp
 
 """
 
-import datetime
 import numpy as np
-import re
-import sys
 
 from prettytable import PrettyTable
 
