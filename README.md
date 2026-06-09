@@ -1,7 +1,7 @@
 # Astronomy Calculations
 Calculations written in Python to obtain astronomical information for a given date.
 
-Currently this code can be used to obtain geocentric planetary positions for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn.
+Currently this code can be used to obtain geocentric planetary positions for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. These planetary positions have benn confirmed to be accurate to +/- 1-2 arc-minutes when compared with high-quality ephemerides like the NASA JPL Horizons System.
 
 See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-clock-1/) for information on this project and its development.
 
