@@ -1,10 +1,7 @@
 # Astronomy Calculations
 Calculations written in Python & the Arduino platform to obtain astronomical positions for a given date.
 
-Currently this code can be used to obtain planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. This code can also be used to obtain planetary positions in terms of degrees within zodiacal signs. 
-
-Currently this code can be used to obtain geocentric planetary positions for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. These planetary positions have benn confirmed to be accurate to +/- 1-2 arc-minutes when compared with high-quality ephemerides like the NASA JPL Horizons System.
-When compared with high-quality ephemerides like the NASA JPL Horizons System, the positions calculated here are accurate to +/- 1-2 arc-minutes for times not too distant from 2000 CE; from 1900 CE to 2100 CE is certainly acceptable. More in-depth testing of the accuracy of this tool has not been done at this time.  
+Currently this code can be used to obtain geocentric planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. These planetary positions have benn confirmed to be accurate to +/- 1-2 arc-minutes when compared with high-quality ephemerides like the NASA JPL Horizons System. These calculations should be accurate for times not too distant from 2000 CE; from 1900 CE to 2100 CE is certainly acceptable. More in-depth testing of the accuracy of this tool has not been done at this time.  
 
 See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-clock-1/) for information on this project and its development.
 
