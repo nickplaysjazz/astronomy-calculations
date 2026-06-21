@@ -19,7 +19,9 @@ Inputs are accepted regardless of order, provided they each fit the exact form p
 For example, to determine planetary positions at 1:30pm UTC on June 4, 2026 CE, run `python calc_planetary_positions.py 2026-06-04 13:30`. 
 
 ### Arduino 
-Arduino scripts are in the directory `arduino`. At this time, the only provided script is `rtc_oled_test.ino`, a script that can be loaded onto an Arduino Nano connected to an RTC module and OLED display module to test their functionality. This will show the time of compilation, possibly offset to another time zone by altering the `TIMEZONE_OFFSET_HOURS` variable. 
+Arduino scripts are in the directory `arduino`. The first provided script is `rtc_oled_test.ino`, a script that can be loaded onto an Arduino Nano connected to an RTC module and OLED display module to test their functionality. This will show the time & date, possibly offset to another time zone by altering the `TIMEZONE_OFFSET_HOURS` variable. 
+
+The second provided script is `astrology_clock.ino`, a script that can be loaded onto an Arduino Nano connected to an RTC module and OLED display module. This will show the local date & time, possibly offset to another time zone by altering the `TIMEZONE_OFFSET_HOURS`, as well as the positions in arc-degrees and arc-minutes of the seven classical planets along the zodiac. These are displayed using traditional astrological symbols. These positions are accurate to about +/- 1 arc-minute.
 
 ## Acknowledgments
 Astronomical calculations are adapted from algorithms developed by Paul Schlyter. 
