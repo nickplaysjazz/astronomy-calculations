@@ -188,7 +188,7 @@ void setup() {
     while (1);
   }
 
-  if (rtc.lostPower()) {
+  if (rtc.lostPower()) { 
     // sets the RTC to the date & time this sketch was compiled, corrected to UTC
     DateTime localCompileTime = DateTime(F(__DATE__), F(__TIME__));
     uint32_t utcTimestamp = localCompileTime.unixtime() - (TIMEZONE_OFFSET_HOURS * 3600);
@@ -395,10 +395,12 @@ void loop () {
       double xg = xh_perturbed;
       double yg = yh_perturbed;
       obsecl[1] = atan2d(yg, xg);
+      obsecl[1] = wrap360(obsecl[1]);
     } else {
       double xg = xh_perturbed + xs;
       double yg = yh_perturbed + ys;
       obsecl[it] = atan2d(yg, xg);
+      obsecl[1] = wrap360(obsecl[1]);
     }
   }
     
@@ -446,7 +448,8 @@ void loop () {
   uint8_t planet_slots[12] = {0};
 
   for (int it = 0; it < 7; it++) {
-    int sign = (int)(obsecl[it] / 30.0);
+    double lon = wrap360(obsecl[it]);
+    int sign = (int)(lon / 30.0);
     if (sign > 11) sign = 11;
     if (sign < 0)  sign = 0;
 
@@ -460,7 +463,7 @@ void loop () {
     int p_col = slot % 3; 
     int p_row = slot / 3; 
     int px = bx + 11 + (p_col * 7);
-    int py = by + 1 + (p_row * 8);
+    int py = by + 3 + (p_row * 8);
 
     unsigned char* pGlyphPtr = (unsigned char*)pgm_read_ptr(&(planetGlyphs[it]));
     for (int c = 0; c < 5; c++) {
@@ -476,13 +479,18 @@ void loop () {
   display.setTextSize(1);
   
   // clock time & date in center
-  display.setCursor(49, 21);
+  display.setCursor(37, 21); // 49, 21
+
+  strcpy_P(buffer, (char*)pgm_read_ptr(&(daysOfTheWeek[weekday])));
+  display.print(buffer);
+  display.print(F(" "));
+
   if (local_h < 10) display.print(F("0"));
   display.print(local_h);
   display.print(F(":"));
   if (local_min < 10) display.print(F("0"));
   display.print((int)local_min);
-  display.setCursor(34, 35);
+  display.setCursor(35, 35);
   display.print(local_y);
   display.print(F("-"));
   if (local_m < 10) display.print(F("0"));
