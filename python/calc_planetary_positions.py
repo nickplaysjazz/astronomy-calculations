@@ -349,7 +349,7 @@ if __name__ == "__main__":
         )
 
     print("")
-    print(f"Calculations for: {y:04}-{m:02}-{day:02} {io_h:02}:{io_m:02} UTC")
+    print(f"Planetary positions for: {y:04}-{m:02}-{day:02} {io_h:02}:{io_m:02} UTC")
     if correct_for_precession:
         print(f"Corrected for precession to epoch J{epoch}.")
     #print(f"Day number: {d} (relative to Jan 1 2000.0 at 0h UT)")
