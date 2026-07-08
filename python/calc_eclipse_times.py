@@ -58,41 +58,117 @@ WORLD_MAP = [
 ]
 
 
-def calculate_delta_t(y, m):
+def calculate_delta_t(year, month):
     """
     Predicts Delta T (TT - UT) in seconds using NASA Espenak-Meeus polynomial fits.
-    Expects integer year (y) and month (m). Should be fairly accurate from -1999 to 3000 CE.
-    See https://eclipse.gsfc.nasa.gov/LEcat5/deltatpoly.html for details
+    Values are quite rough from -1999 to 3000 CE: at 500 BCE the uncertainty is 431 seconds.
+    In the modern age (1700 CE to today), the values are good: the uncertainty is 5 seconds.
+    See https://eclipse.gsfc.nasa.gov/LEcat5/deltatpoly.html for details.
+    See https://eclipse.gsfc.nasa.gov/LEcat5/uncertainty.html for a discussion of uncertainty.
     """
-    decimal_year = y + (m - 0.5) / 12.0
-    if 2005 <= decimal_year < 2050:
-        t = decimal_year - 2005
-        return 62.92 + 0.32217 * t + 0.005589 * t**2
-    elif 1986 <= decimal_year < 2005:
-        t = decimal_year - 2000
-        return 63.86 + 3.374 * t - 0.3541 * t**2 - 0.00104 * t**3
-    elif 1900 <= decimal_year < 1961:
-        t = (decimal_year - 1900) / 100.0
-        return -2.71 + 101.42 * t - 165.23 * t**2 + 372.48 * t**3 - 279.79 * t**4
-    elif 1600 <= decimal_year < 1800:
-        t = (decimal_year - 1600) / 100.0
-        return 120 - 98.08 * t - 153.2 * t**2 + 140.27 * t**3
-    elif 500 <= decimal_year < 1600:
-        u = (decimal_year - 1000) / 100.0
-        return (
-            1574.2
-            - 556.01 * u
-            + 71.23472 * u**2
-            + 0.319781 * u**3
-            - 0.8503463 * u**4
-            - 0.005050998 * u**5
-            + 0.0083572073 * u**6
-        )
-    elif 2050 <= decimal_year < 2150:
-        return -20 + 32 * ((decimal_year - 1820) / 100.0) ** 2
+    y = year + (month - 0.5) / 12.0
+    
+    if y < -500:
+        u = (y - 1820) / 100.0
+        delta_t = -20 + 32 * (u ** 2)
+        
+    elif -500 <= y < 500:
+        u = y / 100.0
+        delta_t = (10583.6 
+                   - 1014.41 * u 
+                   + 33.78311 * (u ** 2) 
+                   - 5.952053 * (u ** 3) 
+                   - 0.1798452 * (u ** 4) 
+                   + 0.022174192 * (u ** 5) 
+                   + 0.0090316521 * (u ** 6))
+        
+    elif 500 <= y < 1600:
+        u = (y - 1000) / 100.0
+        delta_t = (1574.2 
+                   - 556.01 * u 
+                   + 71.23472 * (u ** 2) 
+                   + 0.319781 * (u ** 3) 
+                   - 0.8503463 * (u ** 4) 
+                   - 0.005050998 * (u ** 5) 
+                   + 0.0083572073 * (u ** 6))
+        
+    elif 1600 <= y < 1700:
+        t = y - 1600
+        delta_t = 120 - 0.9808 * t - 0.01532 * (t ** 2) + (t ** 3) / 7129.0
+        
+    elif 1700 <= y < 1800:
+        t = y - 1700
+        delta_t = (8.83 
+                   + 0.1603 * t 
+                   - 0.0059285 * (t ** 2) 
+                   + 0.00013336 * (t ** 3) 
+                   - (t ** 4) / 1174000.0)
+        
+    elif 1800 <= y < 1860:
+        t = y - 1800
+        delta_t = (13.72 
+                   - 0.332447 * t 
+                   + 0.0068612 * (t ** 2) 
+                   + 0.0041116 * (t ** 3) 
+                   - 0.00037436 * (t ** 4) 
+                   + 0.0000121272 * (t ** 5) 
+                   - 0.0000001699 * (t ** 6) 
+                   + 0.000000000875 * (t ** 7))
+        
+    elif 1860 <= y < 1900:
+        t = y - 1860
+        delta_t = (7.62 
+                   + 0.5737 * t 
+                   - 0.251754 * (t ** 2) 
+                   + 0.01680668 * (t ** 3) 
+                   - 0.0004473624 * (t ** 4) 
+                   + (t ** 5) / 233174.0)
+        
+    elif 1900 <= y < 1920:
+        t = y - 1900
+        delta_t = (-2.79 
+                   + 1.494119 * t 
+                   - 0.0598939 * (t ** 2) 
+                   + 0.0061966 * (t ** 3) 
+                   - 0.000197 * (t ** 4))
+        
+    elif 1920 <= y < 1941:
+        t = y - 1920
+        delta_t = 21.20 + 0.84493 * t - 0.076100 * (t ** 2) + 0.0020936 * (t ** 3)
+        
+    elif 1941 <= y < 1961:
+        t = y - 1950
+        delta_t = 29.07 + 0.407 * t - (t ** 2) / 233.0 + (t ** 3) / 2547.0
+        
+    elif 1961 <= y < 1986:
+        t = y - 1975
+        delta_t = 45.45 + 1.067 * t - (t ** 2) / 260.0 - (t ** 3) / 718.0
+        
+    elif 1986 <= y < 2005:
+        t = y - 2000
+        delta_t = (63.86 
+                   + 0.3345 * t 
+                   - 0.060374 * (t ** 2) 
+                   + 0.0017275 * (t ** 3) 
+                   + 0.000651814 * (t ** 4) 
+                   + 0.00002373599 * (t ** 5))
+        
+    elif 2005 <= y < 2050:
+        t = y - 2000
+        delta_t = 62.92 + 0.32217 * t + 0.005589 * (t ** 2)
+        
+    elif 2050 <= y < 2150:
+        delta_t = -20 + 32 * (((y - 1820) / 100.0) ** 2) - 0.5628 * (2150 - y)
+        
     else:
-        t = (decimal_year - 1820) / 100.0
-        return -20.0 + 32.0 * t**2
+        u = (y - 1820) / 100.0
+        delta_t = -20 + 32 * (u ** 2)
+
+    if not (1955 <= y <= 2005):
+        c = -0.000012932 * ((y - 1955) ** 2)
+        delta_t += c
+
+    return delta_t
 
 
 def get_coords(y, m, day, UT, d, planet_index):
@@ -151,8 +227,8 @@ def generate_ascii_map(
     r_moon=None,
 ):
 
-    map_str = "      180W                    120W                    60W                      0                      60E                     120E                   180E\n"
-    map_str += "      +-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+\n"
+    map_str =  "    180W                    120W                    60W                      0                      60E                     120E                    180E\n"
+    map_str += "     +-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+\n"
 
     # map is 144 by 36
     lats = 87.5 - np.arange(36) * 5.0 
@@ -281,7 +357,7 @@ def generate_ascii_map(
                 row_str += "#" if base_char == "#" else " "
         map_str += row_str + "\n"
 
-    map_str += "      +-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+\n"
+    map_str += "     +-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+\n"
     map_str += (
         "Legend: [@:] = Path of Totality/Annularity, [+.] = Partial eclipse, [# ] = No eclipse\n"
         if is_solar
