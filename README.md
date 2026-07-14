@@ -1,7 +1,11 @@
 # Astronomy Calculations
 Calculations written in Python & the Arduino platform to obtain & display astronomical positions for a given date.
 
-The python code can be used to obtain geocentric planetary positions in Right Ascension and Declination OR zodiacal positions in arc-degrees and arc-minutes for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. The python code can also be used to calculate eclipse times and eclipse visibility around the world for one year past a given date. 
+The python code can be used to obtain:
+- geocentric planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn,
+- zodiacal positions in arc-degrees and arc-minutes for the classical planets,
+- eclipse times and eclipse visibility around the world,
+- and the zodiacal positions of the "four angles" (ascendant, midheaven, descendant, and imum coeli) used in astrology.
 
 The Arduino scripts can be used to show the time, date, and zodiacal positions of the seven classical planets in arc-degrees and arc-minutes on an OLED display. 
 
@@ -18,11 +22,16 @@ To calculate planetary positions for a given date, run `python calc_planetary_po
 
 To calculate planetary positions in zodiacal terms for a given date, run `python calc_horoscope.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's position in a sign in degrees and minutes.
 
-Inputs are accepted regardless of order, provided they each fit the exact form provided above. If YYYY-MM-DD is not present in exact form, then the current date is assumed. If HH:MM is not present in exact form, then the current time is assumed.
+To calculate eclipse times for one year past a given date, run `python calc_eclipse_times.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report the time and type of eclipse. More extended info for each eclipse, including an ASCII map of where the eclipse is visible, is saved to `eclipse_report.txt`.
+
+To calculate the zodiacal positions of the "four angles" of astrology, run `python calc_four_angles.py YYYY-MM-DD HH:MM latDegN lonDegE` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. This calculation will report the ascendant, midheaven, descendant, and imum coeli for the given time and location. 
+
+Inputs are accepted regardless of order, provided they each fit the exact forms provided above. 
+- If YYYY-MM-DD is not present in exact form, then the current date is assumed. 
+- If HH:MM is not present in exact form, then the current time is assumed. 
+- If latDegN, lonDegE are not present in exact form with appended N/S & E/W respectively, then Washington, D.C. (39, -77) is assumed. (Negative longitudes are west of prime meridian.)
 
 For example, to determine planetary positions at 1:30pm UTC on June 4, 2026 CE, run `python calc_planetary_positions.py 2026-06-04 13:30`. 
-
-To calculate eclipse times for one year past a given date, run `python calc_eclipse_times.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report the time and type of eclipse. More extended info for each eclipse, including an ASCII map of where the eclipse is visible, is saved to `eclipse_report.txt`.
 
 ### Arduino 
 Arduino scripts are in the directory `arduino`. All scripts require an Arduino Nano connected to an RTC module and OLED display module. 
