@@ -4,6 +4,7 @@ Calculations written in Python & the Arduino platform to obtain & display astron
 The python code can be used to obtain:
 - geocentric planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn,
 - zodiacal positions in arc-degrees and arc-minutes for the classical planets,
+- apparent geocentric speeds of the classical planets relative to their mean apparent geocentric speeds,
 - eclipse times and eclipse visibility around the world,
 - and the zodiacal positions of the "four angles" (ascendant, midheaven, descendant, and imum coeli) used in astrology.
 
@@ -21,6 +22,8 @@ Python scripts are in the directory `python`.
 To calculate planetary positions for a given date, run `python calc_planetary_positions.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's Right Ascension (RA) in degrees and the Declination (Dec) in degrees.
 
 To calculate planetary positions in zodiacal terms for a given date, run `python calc_horoscope.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's position in a sign in degrees and minutes.
+
+To calculate the apparent geocentric speeds of the classical planets, run `python calc_planetary_motion.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's apparent geocentric speed in degrees per day, the mean speed of each planet, the current deviation, and a classification of such as direct motion or retrograde motion.
 
 To calculate eclipse times for one year past a given date, run `python calc_eclipse_times.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report the time and type of eclipse. More extended info for each eclipse, including an ASCII map of where the eclipse is visible, is saved to `eclipse_report.txt`.
 
