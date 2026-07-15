@@ -154,16 +154,16 @@ if __name__ == "__main__":
         deviation_pct = ((current_speed - mean_speed) / mean_speed) * 100
         
         if current_speed < 0:
-            status = "Retrograde"
+            status = "retrograde"
         elif current_speed > mean_speed:
-            status = "Direct (Swift)"
+            status = "direct (swift)"
         else:
-            status = "Direct (Slow)"
+            status = "direct (slow)"
             
         table.add_row([
-            planet_name.capitalize(),
-            f"{current_speed:+.4f}{degree_sign}/day",
-            f"{mean_speed:.4f}{degree_sign}/day",
+            planet_name,
+            f"{current_speed:+.2f}{degree_sign}/day",
+            f"{mean_speed:.2f}{degree_sign}/day",
             f"{deviation_pct:+.1f}%",
             status
         ])
