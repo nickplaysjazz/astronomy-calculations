@@ -5,6 +5,7 @@ The python code can be used to obtain:
 - geocentric planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn,
 - rise and set times in a 24-hour period of the classical planets for a given location,
 - zodiacal positions in arc-degrees and arc-minutes for the classical planets,
+- planetary ingresses between the zodiac signs for the classical planets,
 - planetary aspects between the classical planets,
 - apparent geocentric speeds of the classical planets relative to their mean apparent geocentric speeds,
 - eclipse times and eclipse visibility around the world,
@@ -26,6 +27,8 @@ To calculate planetary positions for a given date, run `python calc_planetary_po
 To calculate rise and set times of the planets, run `python calc_rise_and_set_times.py YYYY-MM-DD HH:MM latDegN lonDegE` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. This calculation will report the rise and set times, if occurring, for each planet at the given location within a 24 hour UTC timespan. (Since the times are given in UTC, the local rise & set times may occur on a different calendar date than the one provided!)
 
 To calculate planetary positions in zodiacal terms for a given date, run `python calc_horoscope.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's position in a sign in degrees and minutes.
+
+To calculate planetary ingresses into zodiac signs, run `python calc_planetary_ingresses.py PLANET YYYY-MM-DD HH:MM` with HH:MM in UTC. PLANET should be one of `"sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"`. This will report the time that the planetary body moves into a sign for 1 year past the given date, and if the motion is direct or retrograde.
 
 To calculate the aspects between planets for a given date, run `python calc_planetary_aspects.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report the major aspects (conjunction, sextile, square, trine, opposition) found between planets. The default "orb" of +/- 7 degrees for each of these aspects can be altered within the script.
 
