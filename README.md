@@ -3,6 +3,7 @@ Calculations written in Python & the Arduino platform to obtain & display astron
 
 The python code can be used to obtain:
 - geocentric planetary positions in Right Ascension and Declination for the classical planets: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn,
+- rise and set times in a 24-hour period of the classical planets for a given location,
 - zodiacal positions in arc-degrees and arc-minutes for the classical planets,
 - planetary aspects between the classical planets,
 - apparent geocentric speeds of the classical planets relative to their mean apparent geocentric speeds,
@@ -21,6 +22,8 @@ See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-c
 Python scripts are in the directory `python`.
 
 To calculate planetary positions for a given date, run `python calc_planetary_positions.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's Right Ascension (RA) in degrees and the Declination (Dec) in degrees.
+
+To calculate rise and set times of the planets, run `python calc_rise_and_set_times.py YYYY-MM-DD HH:MM latDegN lonDegE` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. This calculation will report the rise and set times, if occurring, for each planet at the given location within a 24 hour UTC timespan. (Since the times are given in UTC, the local rise & set times may occur on a different calendar date than the one provided!)
 
 To calculate planetary positions in zodiacal terms for a given date, run `python calc_horoscope.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's position in a sign in degrees and minutes.
 
