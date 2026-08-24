@@ -182,13 +182,11 @@ def convert_utc_to_local():
         if tz_name:
             target_tz = ZoneInfo(tz_name)
             tz_label = f"GPS Lookup ({tz_name})"
+            tz_label +=  f" : {abs(latitude):.1f}°{'N' if latitude >= 0 else 'S'}, "
+            tz_label += f"{abs(longitude):.1f}°{'E' if longitude >= 0 else 'W'}"
         else:
             tz_label = "Unknown / International Waters"
 
-    print(
-        f"Coordinates     : {abs(latitude):.4f}°{'N' if latitude >= 0 else 'S'}, "
-        f"{abs(longitude):.4f}°{'E' if longitude >= 0 else 'W'}"
-    )
 
     if target_tz:
         dt_local = dt_utc.astimezone(target_tz)
