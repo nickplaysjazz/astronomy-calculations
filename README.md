@@ -23,7 +23,7 @@ See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-c
 ### Python
 Python scripts are in the directory `python`.
 
-To convret UTC times to local times, run `python convert_utc_to_local_time.py YYYY-MM-DD HH:MM [latDegN longDegE | TIMEZONE]` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. TIMEZONE will accept several formats, for instance: UTC-5, EDT, EST, CDT, America/New_York, or +02:00. 
+To convert UTC times to local times, run `python convert_utc_to_local_time.py YYYY-MM-DD HH:MM [latDegN longDegE | TIMEZONE]` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. TIMEZONE will accept several formats, for instance: UTC-5, EDT, EST, CDT, America/New_York, or +02:00. 
 
 To calculate planetary positions for a given date, run `python calc_planetary_positions.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's Right Ascension (RA) in degrees and the Declination (Dec) in degrees.
 
