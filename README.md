@@ -6,6 +6,7 @@ The python code can be used to obtain:
 - rise and set times in a 24-hour period of the classical planets for a given location,
 - zodiacal positions in arc-degrees and arc-minutes for the classical planets,
 - planetary ingresses between the zodiac signs for the classical planets,
+- exact times of equinoxes and solstices, 
 - planetary aspects between the classical planets,
 - apparent geocentric speeds of the classical planets relative to their mean apparent geocentric speeds,
 - eclipse times and eclipse visibility around the world,
@@ -22,6 +23,8 @@ See [my series of blog posts](https://www.nickplaysjazz.com/posts/astrological-c
 ### Python
 Python scripts are in the directory `python`.
 
+To convret UTC times to local times, run `python convert_utc_to_local_time.py YYYY-MM-DD HH:MM [latDegN longDegE | TIMEZONE]` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. TIMEZONE will accept several formats, for instance: UTC-5, EDT, EST, CDT, America/New_York, or +02:00. 
+
 To calculate planetary positions for a given date, run `python calc_planetary_positions.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's Right Ascension (RA) in degrees and the Declination (Dec) in degrees.
 
 To calculate rise and set times of the planets, run `python calc_rise_and_set_times.py YYYY-MM-DD HH:MM latDegN lonDegE` with HH:MM in UTC and latDegN, lonDegE with appended N/S or E/W respectively. This calculation will report the rise and set times, if occurring, for each planet at the given location within a 24 hour UTC timespan. (Since the times are given in UTC, the local rise & set times may occur on a different calendar date than the one provided!)
@@ -29,6 +32,8 @@ To calculate rise and set times of the planets, run `python calc_rise_and_set_ti
 To calculate planetary positions in zodiacal terms for a given date, run `python calc_horoscope.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report each planet's position in a sign in degrees and minutes.
 
 To calculate planetary ingresses into zodiac signs, run `python calc_planetary_ingresses.py PLANET YYYY-MM-DD HH:MM` with HH:MM in UTC. PLANET should be one of `"sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"`. This will report the time that the planetary body moves into a sign for 1 year past the given date, and if the motion is direct or retrograde.
+
+To calculate equinox & solstice times, run `python calc_equinoxes_and_solstices.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This will report the exact time of equinoxes and solstices occurring 1 year past the given date. 
 
 To calculate the aspects between planets for a given date, run `python calc_planetary_aspects.py YYYY-MM-DD HH:MM` with HH:MM in UTC. This calculation will report the major aspects (conjunction, sextile, square, trine, opposition) found between planets. The default "orb" of +/- 7 degrees for each of these aspects can be altered within the script.
 
